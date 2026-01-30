@@ -17,7 +17,7 @@ default wyatt_trust = 0
 default jecyka_trust = 0
 default cill_trust = 0
 
-
+image davidend = Movie(play="David.webm",size=(1920,1080),loop=False)
 # The game starts here.
 
 label start:
@@ -70,13 +70,14 @@ elif povname == "The Coach":
     j ""
     jump name
 elif povname == "The Agent":
-    c "SOME MORE TEXT."
+    c "Hmph, denied"
     jump name
-elif povname == "David":
-    jump davidend
+elif povname == "David","Lucy":
+        with fade
+        $ renpy.movie_cutscene("images/movies/david.webm") 
+        return
 else:
-    host "kdsjfkj"
-    
+    host "So now that's everyone accounted for"
+    host "Welcome to the playground"    
 
-    label davidend:
-        $ renpy.movie_cutscene("")
+       
