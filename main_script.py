@@ -7,6 +7,7 @@ define l = Character("Lunacello", color="#e68302")
 define w = Character("Wyatt", color="#ffee00")
 define j = Character("Jecyka", color= "#ff0000")
 define c = Character("Cillstead", color= "#0000ff")
+
 define host = Character("Sir Veridan, The Altruist")
 define pov = Character("[povname]")
 
@@ -20,57 +21,62 @@ default cill_trust = 0
 # The game starts here.
 
 label start:
+    play music "Roblox Meep City_ The Playground Theme (Day Time).mp3" volume 0.2
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
-
-    scene bg room
-
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
+    scene bg black
+    with dissolve
 
     show johnsanili normal
+    with fade
 
-    # These display lines of dialogue.
+    host "Ah finally you've arrived"
 
-    e "So You've finally decided to show up"
+    host "Allow me to welcome you to this lovely Institute"
 
-    e "Come The others are waiting"
+    host "Come The others are waiting"
 
-    e "Are you coming or not?"
+    scene bg spawn
+    with dissolve
+
+    show johnsanili normal at left
+    with moveinleft
+
+    host "Greetings everyone, our final associate has arrived!"
+    
+    show fhaeris annoyed at right
+    with moveinright
+    m "finally"
+
+    host "Please come and sit, have you decided on a title yet?"
+
+    label name:
+    $ povname = renpy.input("What is your name", length=32)
+    $ povname = povname.strip()
+    pov "Hello you may call me [povname]"
+if povname == "The Altruist":
+    host "Haha"
+    host "No. Try Again"
+    jump name
+elif povname == "The Scouter":
+    m "Tch. Already taken"
+    jump name
+elif povname == "The Conductor":
+    l "I do believe if anyone deserves that title it should be me."
+    jump name
+elif povname == "The Dungeon Master":
+    w "Hey Sorry but I got that."
+    jump name
+elif povname == "The Coach":
+    j ""
+    jump name
+elif povname == "The Agent":
+    c "SOME MORE TEXT."
+    jump name
+elif povname == "David":
+    jump davidend
+else:
+    host "kdsjfkj"
     
 
-    menu:
-        "-follow her-":
-            jump choices1_a
-        "-stay there":
-            jump choices1_b
-
-    label choices1_a:
-        scene bg bloodslash2_big
-        with fade
-        p "Your finally mine"
-        p "HAHAHAHAHAHAHAHAHA"
-        scene bg single_bedroom
-        show phillow smile2
-        with fade
-        p "HEY! WAKE UP"
-
-    return
-
-
-    label choices1_b:
-        scene bg office40
-        show phillow angry 
-        with fade
-        p "OH"
-        p "Why you stay?"
-
-
-    return
-
-    # This ends the game.
-
-    return
+    label davidend:
+        $ renpy.movie_cutscene("")
