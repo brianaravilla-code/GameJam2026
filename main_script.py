@@ -1,109 +1,220 @@
-# The script of the game goes in this file.
+# Hi there! This is the Ren'Py tutorial game. It's actually a fairly bad
+# example of Ren'Py programming style - the examples we present in the game
+# itself are good, but to make them easy to present we wind up doing
+# some non-standard high-level things.
+#
+# So feel free to poke around, but if you're really looking for an example
+# of good Ren'Py programming style, consider checking out The Question
+# instead.
 
-# Declare characters used by this game. The color argument colorizes the
-# name of the character.
-define m = Character("Mariana", color="#47dd4e")
-define l = Character("Lunacello", color="#e68302")
-define w = Character("Wyatt", color="#ffee00")
-define j = Character("Jecyka", color= "#ff0000")
-define c = Character("Cillstead", color= "#0000ff")
+# Declare the characters.
+define e = Character(_('Eileen'), color="#c8ffc8")
 
-define host = Character("Sir Veridan, The Altruist")
-define pov = Character("The [povname]")
+init python:
 
-default mari_trust = 0
-default luna_trust = 0
-default wyatt_trust = 0
-default jecyka_trust = 0
-default cill_trust = 0
+    # A list of section and tutorial objects.
+    tutorials = [ ]
 
-image davidend = Movie(play="David.webm",size=(1920,1080),loop=False)
+    class Section(object):
+        """
+        Represents a section of the tutorial menu.
+
+        `title`
+            The title of the section. This should be a translatable string.
+        """
+
+        def __init__(self, title):
+            self.kind = "section"x``
+            self.title = title
+
+            tutorials.append(self)
+
+
+    class Tutorial(object):
+        """
+        Represents a label that we can jump to.
+        """
+
+        def __init__(self, label, title, move=True):
+            self.kind = "tutorial"
+            self.label = label
+            self.title = title
+
+            if move and (move != "after"):
+                self.move_before = True
+            else:
+                self.move_before = False
+
+            if move and (move != "before"):
+                self.move_after = True
+            else:
+                self.move_after = False
+
+            tutorials.append(self)
+
+
+    Section(_("Quickstart"))
+
+    Tutorial("tutorial_playing", _("Player Experience"))
+    Tutorial("tutorial_create", _("Creating a New Game"))
+    Tutorial("tutorial_dialogue", _("Writing Dialogue"))
+    Tutorial("tutorial_images", _("Adding Images"))
+    Tutorial("tutorial_simple_positions", _("Positioning Images"))
+    Tutorial("tutorial_transitions", _("Transitions"))
+    Tutorial("tutorial_music", _("Music and Sound Effects"))
+    Tutorial("tutorial_menus", _("Choices and Python"))
+    Tutorial("tutorial_input", _("Input and Interpolation"))
+    Tutorial("tutorial_video", _("Video Playback"))
+    Tutorial("tutorial_nvlmode", _("NVL Mode"), move=None)
+    Tutorial("director", _("Tools and the Interactive Director"))
+    Tutorial("distribute", _("Building Distributions"))
+
+    Section(_("In Depth"))
+
+    Tutorial("text", _("Text Tags, Escapes, and Interpolation"))
+    Tutorial("demo_character", _("Character Objects"))
+    Tutorial("simple_displayables", _("Simple Displayables"), move=None)
+    Tutorial("demo_transitions", _("Transition Gallery"))
+
+    # Positions and Transforms?
+    Tutorial("tutorial_positions", _("Position Properties"))
+
+    # Advanced Transforms?
+    Tutorial("tutorial_atl", _("Transforms and Animation"))
+    Tutorial("transform_properties", _("Transform Properties"))
+
+    Tutorial("new_gui", _("GUI Customization"))
+    Tutorial("styles", _("Styles and Style Properties"), move=None)
+    Tutorial("tutorial_screens", _("Screen Basics"), move=None)
+    Tutorial("screen_displayables", _("Screen Displayables"), move=None)
+
+    Tutorial("demo_minigame", _("Minigames and CDDs"))
+    Tutorial("translations", _("Translations"))
+
+screen tutorials(adj):
+
+    frame:
+        xsize 640
+        xalign .5
+        ysize 485
+        ypos 30
+
+        has side "c r b"
+
+        viewport:
+            yadjustment adj
+            mousewheel True
+            draggable True
+
+            vbox:
+                for i in tutorials:
+
+                    if i.kind == "tutorial":
+
+                        textbutton i.title:
+                            action Return(i)
+                            left_padding 20
+                            xfill True
+
+                    else:
+
+                        null height 10
+                        text i.title alt ""
+                        null height 5
+
+        bar adjustment adj style "vscrollbar"
+
+        textbutton _("That's enough for now."):
+            xfill True
+            action Return(False)
+            top_margin 10
+
+
+# This is used to preserve the state of the scrollbar on the selection
+# screen.
+default tutorials_adjustment = ui.adjustment()
+
+# True if this is the first time through the tutorials.
+default tutorials_first_time = True
+
 # The game starts here.
-
+#begin start
 label start:
-  
+#end start
 
-    scene bg black
-    
+    scene bg washington
+    show eileen vhappy
     with dissolve
-    play music "images/Roblox Meep City_ The Playground Theme (Day Time).mp3" volume 0.2
-    show johnsanili normal
-    with fade
 
-    host "Ah finally you've arrived"
+    # Start the background music playing.
+    play music "sunflower-slow-drag.ogg"
 
-    host "Allow me to welcome you to this lovely Institute"
+    window show
 
-    host "Come The others are waiting"
+    e "Hi! My name is Eileen, and I'd like to welcome you to the Ren'Py tutorial."
 
-    hide bg black
+    show eileen happy
 
-    show bg spawn behind johnsanili
-    with fade
+    e "In this tutorial, we'll teach you the basics of Ren'Py, so you can make games of your own. We'll also demonstrate many features, so you can see what Ren'Py is capable of."
 
-    show johnsanili normal at left
-    with moveinleft
+label tutorials:
 
-    host "Greetings everyone, our final associate has arrived!"
-    
-    show fhaeris annoyed at right
-    with moveinright
-    m "finally"
+    show eileen happy at left
+    with move
 
-    host "Please come and sit, have you decided on a title yet?"
+    if tutorials_first_time:
+        $ e(_("What would you like to see?"), interact=False)
+    else:
+        $ e(_("Is there anything else you'd like to see?"), interact=False)
 
-    label name:
-    $ povname = renpy.input("Which title would you like to go by: The", length=32)
-    $ povname = povname.strip()
-    $ povname = povname.capitalize()
-if povname == "Altruist":
-    pov "Hello you may call me The [povname]"
-    host "Haha. No, Try again"
-    jump name
-elif povname == "Scouter":
-    pov "Hello you may call me The [povname]"
-    host "Hehe Apologies but that title has been taken"
-    jump name
-elif povname == "Conductor":
-    pov "Hello you may call me The [povname]"
-    host "Woops but that title has been taken"
-    jump name
-elif povname == "Dungeon Master":
-    pov "Hello you may call me The [povname]"
-    host "Sorry but that title is in use"
-    jump name
-elif povname == "Coach":
-    pov "Hello you may call me The [povname]"
-    host "Ooh that's being used by someone else"
-    jump name
-elif povname == "Agent":
-    pov "Hello you may call me The [povname]"
-    host "Nope it's being used"
-    jump name
-elif povname == "David":
-        with fade
-        $ renpy.movie_cutscene("images/movies/david.webm") 
-        return
-elif povname == "Lucy":
-        with fade
-        $ renpy.movie_cutscene("images/movies/david.webm") 
-        return
-elif povname == "Edgerunner":
-        with fade
-        $ renpy.movie_cutscene("images/movies/david.webm") 
-        return
-else:
-    host "So now that's everyone accounted for"
-    host "Welcome to the playground" 
-    jump Meeting
-    
+    $ tutorials_first_time = False
+    $ renpy.choice_for_skipping()
 
-label Meeting:
-    host "First things first to discuss matters of payment"
-    host "I'll gladly acce-"
-    "*Ring Ring*{w} *Ring Ring* {w} *Ring Ring*"
-    host "Excuse me I have to take this"
-    host "Yes?{w} mhm mhm {w} Okay {w} Right away I'll be right there"
-    host "Apologies, but I must go for a moment, there are pressing matters I must attend to"
-    host "Please wait here while I have a few things sorted"
+    call screen tutorials(adj=tutorials_adjustment)
 
+    $ tutorial = _return
+
+    if not tutorial:
+        jump end
+
+    if tutorial.move_before:
+        show eileen happy at center
+        with move
+
+    $ reset_example()
+
+    call expression tutorial.label from _call_expression
+
+    if tutorial.move_after:
+        hide example
+        show eileen happy at left
+        with move
+
+    jump tutorials
+
+label end:
+
+    show eileen happy at center
+    with move
+
+    show _finale behind eileen
+
+
+    e "Thank you for viewing this tutorial."
+
+    e "If you'd like to see a full Ren'Py game, select \"The Question\" in the launcher."
+
+    e "You can download new versions of Ren'Py from {a=https://www.renpy.org/}https://www.renpy.org/{/a}. For help and discussion, check out the {a=https://lemmasoft.renai.us/forums/}Lemma Soft Forums{/a}."
+
+    e "We'd like to thank Piroshki for contributing my sprites; Mugenjohncel for Lucy, the band, and drawn backgrounds; and Jake for the magic circle."
+
+    e "The background music is \"Sunflower Slow Drag\", by Scott Joplin and Scott Hayden, performed by the United States Marine Band. The concert music is by Alessio."
+
+    show eileen vhappy
+
+    e "We look forward to seeing what you create with Ren'Py. Have fun!"
+
+    window hide
+
+    # Returning from the top level quits the game.
+    return
