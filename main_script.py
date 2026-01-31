@@ -1,220 +1,560 @@
-# Hi there! This is the Ren'Py tutorial game. It's actually a fairly bad
-# example of Ren'Py programming style - the examples we present in the game
-# itself are good, but to make them easy to present we wind up doing
-# some non-standard high-level things.
-#
-# So feel free to poke around, but if you're really looking for an example
-# of good Ren'Py programming style, consider checking out The Question
-# instead.
+define m = Character("Mariana", color="#47dd4e")
+define l = Character("Lunacello", color="#e68302")
+define w = Character("Wyatt", color="#ffee00")
+define j = Character("Jecyka", color= "#ff0000")
+define c = Character("Cillstead", color= "#0000ff")
+define u = Character("Unrevealed", color="#605732")
+# Normal happy, sad, angry, shocked ^
 
-# Declare the characters.
-define e = Character(_('Eileen'), color="#c8ffc8")
+define host = Character("Sir Veridan, The Altruist", color="#0f4500")
+define pov = Character("[povname]", color="#000000")
 
-init python:
+default mari_talk = False
+default luna_talk = False
+default wyatt_talk = False 
+default jecyka_talk = False 
+default cill_talk = False 
 
-    # A list of section and tutorial objects.
-    tutorials = [ ]
+default sus = 1
+default unsus = 1
 
-    class Section(object):
-        """
-        Represents a section of the tutorial menu.
+image davidend = Movie(play="David.webm",size=(1920,1080),loop=False)
 
-        `title`
-            The title of the section. This should be a translatable string.
-        """
+screen escape_only_movie(movie_file):
+    modal True 
+    add Movie(play=movie_file, loop=False)
+    key "K_ESCAPE" action Return()
 
-        def __init__(self, title):
-            self.kind = "section"x``
-            self.title = title
-
-            tutorials.append(self)
-
-
-    class Tutorial(object):
-        """
-        Represents a label that we can jump to.
-        """
-
-        def __init__(self, label, title, move=True):
-            self.kind = "tutorial"
-            self.label = label
-            self.title = title
-
-            if move and (move != "after"):
-                self.move_before = True
-            else:
-                self.move_before = False
-
-            if move and (move != "before"):
-                self.move_after = True
-            else:
-                self.move_after = False
-
-            tutorials.append(self)
+label sus_increased: # bad
+    $ sus += 1
+    "Suspicions towards you is increased!"
+    return
 
 
-    Section(_("Quickstart"))
+label unsus_increased: # good
+    $ unsus += 1
+    "Trust towards you is increased!"
+    return
 
-    Tutorial("tutorial_playing", _("Player Experience"))
-    Tutorial("tutorial_create", _("Creating a New Game"))
-    Tutorial("tutorial_dialogue", _("Writing Dialogue"))
-    Tutorial("tutorial_images", _("Adding Images"))
-    Tutorial("tutorial_simple_positions", _("Positioning Images"))
-    Tutorial("tutorial_transitions", _("Transitions"))
-    Tutorial("tutorial_music", _("Music and Sound Effects"))
-    Tutorial("tutorial_menus", _("Choices and Python"))
-    Tutorial("tutorial_input", _("Input and Interpolation"))
-    Tutorial("tutorial_video", _("Video Playback"))
-    Tutorial("tutorial_nvlmode", _("NVL Mode"), move=None)
-    Tutorial("director", _("Tools and the Interactive Director"))
-    Tutorial("distribute", _("Building Distributions"))
+#label savagery_terror:
+#    if sus >= 10:
+#       call sus_ending #ending 3(bad)
+#    elif sus == 9:
+#       call mid_ending #ending 2(mid)
 
-    Section(_("In Depth"))
-
-    Tutorial("text", _("Text Tags, Escapes, and Interpolation"))
-    Tutorial("demo_character", _("Character Objects"))
-    Tutorial("simple_displayables", _("Simple Displayables"), move=None)
-    Tutorial("demo_transitions", _("Transition Gallery"))
-
-    # Positions and Transforms?
-    Tutorial("tutorial_positions", _("Position Properties"))
-
-    # Advanced Transforms?
-    Tutorial("tutorial_atl", _("Transforms and Animation"))
-    Tutorial("transform_properties", _("Transform Properties"))
-
-    Tutorial("new_gui", _("GUI Customization"))
-    Tutorial("styles", _("Styles and Style Properties"), move=None)
-    Tutorial("tutorial_screens", _("Screen Basics"), move=None)
-    Tutorial("screen_displayables", _("Screen Displayables"), move=None)
-
-    Tutorial("demo_minigame", _("Minigames and CDDs"))
-    Tutorial("translations", _("Translations"))
-
-screen tutorials(adj):
-
-    frame:
-        xsize 640
-        xalign .5
-        ysize 485
-        ypos 30
-
-        has side "c r b"
-
-        viewport:
-            yadjustment adj
-            mousewheel True
-            draggable True
-
-            vbox:
-                for i in tutorials:
-
-                    if i.kind == "tutorial":
-
-                        textbutton i.title:
-                            action Return(i)
-                            left_padding 20
-                            xfill True
-
-                    else:
-
-                        null height 10
-                        text i.title alt ""
-                        null height 5
-
-        bar adjustment adj style "vscrollbar"
-
-        textbutton _("That's enough for now."):
-            xfill True
-            action Return(False)
-            top_margin 10
+#label compassionate_heart:
+#   if unsus >= 10:
+#      call unsus_ending #ending 1 (good)
+#   elif compassion == 9:
+#      call mid_ending #ending 2(mid)
 
 
-# This is used to preserve the state of the scrollbar on the selection
-# screen.
-default tutorials_adjustment = ui.adjustment()
 
-# True if this is the first time through the tutorials.
-default tutorials_first_time = True
 
-# The game starts here.
-#begin start
 label start:
-#end start
+    scene bg black
+    with fade
+    play music "NocturneCB.mp3" volume 0.3
+    u "My my!"
 
-    scene bg washington
-    show eileen vhappy
+    "A strong and inviting voice reaches out to you in this big stretch of a hallway."
+    hide bg black
+    show bg stretch
+    with fade
+    
+
+    show host happy
     with dissolve
 
-    # Start the background music playing.
-    play music "sunflower-slow-drag.ogg"
+    u "Welcome, beloved guest...{w} your arrival brings glad tidings to the Organization."
 
-    window show
+    "The person behind this thick mask in front of you has you aggravated."
 
-    e "Hi! My name is Eileen, and I'd like to welcome you to the Ren'Py tutorial."
+    u "A bit late, yes.. {w} but your presence alone compensates for any sort of tardiness."
 
-    show eileen happy
+    hide host happy
+    show host normal
+    with fade
 
-    e "In this tutorial, we'll teach you the basics of Ren'Py, so you can make games of your own. We'll also demonstrate many features, so you can see what Ren'Py is capable of."
+    "They should know your name, but thinks it's more plausible to let yourself do your own introductions."
 
-label tutorials:
+    u "It truly is an honor to meet you.. {w} ehmm.."
 
-    show eileen happy at left
-    with move
+    label name:
+    $ povname = renpy.input("Please input your preferred \"Undercover Title\" ", length=32)
+    $ povname = povname.strip()
+    $ povname = povname.capitalize()
 
-    if tutorials_first_time:
-        $ e(_("What would you like to see?"), interact=False)
-    else:
-        $ e(_("Is there anything else you'd like to see?"), interact=False)
+if povname == "The Altruist":
+    pov "\'[povname]\'.. You may call me \'[povname]\'"
+    u "Hah, I'm afraid I can't allow that, my dear guest.. {w} Please, try again."
+    jump name
+elif povname == "The Scouter":
+    pov "\'[povname]\'.. You may call me \'[povname]\'"
+    u "Hah, I'm afraid that won't do,{w} try again."
+    jump name
+elif povname == "The Conductor":
+    pov "\'[povname]\'.. You may call me \'[povname]\'"
+    u "Ah..{w} I think you are mistaken, perhaps you should try again. "
+    jump name
+elif povname == "The Dungeon Master":
+    pov "\'[povname]\'.. You may call me \'[povname]\'"
+    u "I'm afraid I can't let you have that title, my dear guest.."
+    jump name
+elif povname == "The Coach":
+    pov "\'[povname]\'.. You may call me \'[povname]\'"
+    u "I don't think you are of such stature to be a coach of any team whatsoever.{w} Please, do try again."
+    jump name
+elif povname == "The Agent":
+    pov "\'[povname]\'.. You may call me \'[povname]\'"
+    u "Uhm, I highly doubt such a title is plausible for you, my dear guest..{w} Do try again, plesae."
+    jump name
 
-    $ tutorials_first_time = False
-    $ renpy.choice_for_skipping()
+# ending 4 (secret ending)
+elif povname == "David":
+        hide host normal
+        show host shocked
+        with fade
+        u "Oh...{w} that name... {w} surely not.."
 
-    call screen tutorials(adj=tutorials_adjustment)
+        u "I'm afraid that cannot be a title for any reason whatsoever.."
 
-    $ tutorial = _return
+        pov "Why not? It's my nam-"
+        hide host shocked
+        show host normal
+        with fade
+        stop music fadeout 2.0
+        u "I'm afraid it matters not in this matter, my dear guest...{w} for such a story cannot be told through mere words..{w} but through a-"
+        
+        $ renpy.music.set_volume(0.3, delay=0, channel='movie')
+        call screen escape_only_movie("images/movies/david.webm")
+        return
 
-    if not tutorial:
-        jump end
+# ending 4 (secret ending)
+elif povname == "david":
+        hide host normal
+        show host shocked
+        with fade
+        u "Oh...{w} that name... {w} surely not.."
 
-    if tutorial.move_before:
-        show eileen happy at center
-        with move
+        u "I'm afraid that cannot be a title for any reason whatsoever.."
 
-    $ reset_example()
+        pov "Why not? It's my nam-"
+        hide host shocked
+        show host normal
+        with fade
+        stop music fadeout 2.0
+        u "I'm afraid it matters not in this matter, my dear guest...{w} for such a story cannot be told through mere words..{w} but through a-"
+        
+        $ renpy.music.set_volume(0.3, delay=0, channel='movie')
+        call screen escape_only_movie("images/movies/david.webm")
+        return
 
-    call expression tutorial.label from _call_expression
+# ending 4 (secret ending)
+elif povname == "Lucy":
+        hide host normal
+        show host shocked
+        with fade
+        u "Oh...{w} that name... {w} surely not.."
 
-    if tutorial.move_after:
-        hide example
-        show eileen happy at left
-        with move
+        u "I'm afraid that cannot be a title for any reason whatsoever.."
 
-    jump tutorials
+        pov "Why not? It's my nam-"
+        hide host shocked
+        show host normal
+        with fade
+        stop music fadeout 2.0
+        u "I'm afraid it matters not in this matter, my dear guest...{w} for such a story cannot be told through mere words..{w} but through a-"
+        
+        $ renpy.music.set_volume(0.3, delay=0, channel='movie')
+        call screen escape_only_movie("images/movies/david.webm")
+        return
 
-label end:
+# ending 4 (secret ending)
+elif povname == "lucy":
+        hide host normal
+        show host shocked
+        with fade
+        u "Oh...{w} that name... {w} surely not.."
 
-    show eileen happy at center
-    with move
+        u "I'm afraid that cannot be a title for any reason whatsoever.."
 
-    show _finale behind eileen
+        pov "Why not? It's my nam-"
+        hide host shocked
+        show host normal
+        with fade
+        stop music fadeout 2.0
+        u "I'm afraid it matters not in this matter, my dear guest...{w} for such a story cannot be told through mere words..{w} but through a-"
+        
+        $ renpy.music.set_volume(0.3, delay=0, channel='movie')
+        call screen escape_only_movie("images/movies/david.webm")
+
+        return
+
+if not povname:
+    u "I...{w} Uhhh.. {w} Ummmmmm..."
+
+    u "I'm..{w} I'll be..{w} You can call m-"
+
+    hide host normal
+    show host happy
+    with fade
+
+    "You stutter your way inside the person's funny bone."
+
+    u "Hah, no need to dwell on such trivial matters, my dear guest.."
+
+    hide host happy
+    show host normal 
+    with fade
+
+    u "After all, you are one of our dear guest..{w} Therefore, I see no other title befitting you other than such."
+
+    $ pov = "Dear Guest"
+
+    "The mask the individual wears portrudes to the left, but you see them pay no mind whatsoever..{w} as if they value their identity as expendable for such an event."
+
+    pov "Very well..{w}"
+    
+    hide host normal
+    show host happy
+    with fade
+
+    u "I am very pleased with your appearance alone, [povname]"
+
+    "You see a hand reach out for you, firm and stern as it asks for your reach."
+
+    u "Such pleasantries does not need to be extended any further{w}, please, allow me to lead you to the \'Meeting Room\'."
+
+    hide host happy
+    show host normal
+    with dissolve
+
+    u "That is unless you have any concerns so far just from our Introductions?"
+
+    "As notice of concern arises, but it felt more like skepticism and suspicions directed towards you."
+
+    u "You might've not noticed it,{w} but you seem shaky,{w} are you feeling ill?"
+
+    u "Perhaps..{w} You are in no way to continue your agenda with us today?"
+
+else:
+    hide host normal
+    show host happy
+    with fade
+
+    u "Perfect!"
+
+    u "I am very pleased with your appearance alone, [povname]"
+
+    "You see a hand reach out for you, firm and stern as it asks for your reach."
+
+    u "Such pleasantries does not need to be extended any further{w}, please, allow me to lead you to the \'Meeting Room\'."
+    
+    hide host happy
+    show host normal
+    with dissolve
+
+    u "That is unless you have any concerns so far just from our Introductions?"
+
+    "As notice of concern arises, but it felt more like skepticism and suspicions directed towards you."
+
+    u "You might've not noticed it,{w} but you seem shaky,{w} are you feeling ill?"
+
+    u "Perhaps..{w} You are in no way to continue your agenda with us today?"
 
 
-    e "Thank you for viewing this tutorial."
+menu:
 
-    e "If you'd like to see a full Ren'Py game, select \"The Question\" in the launcher."
+    "There is no need for you to sharpen your deception around me, host...":
+        call sus_increased
+        jump bad
+    
 
-    e "You can download new versions of Ren'Py from {a=https://www.renpy.org/}https://www.renpy.org/{/a}. For help and discussion, check out the {a=https://lemmasoft.renai.us/forums/}Lemma Soft Forums{/a}."
+    "Oh, no need to fret upon the little details.":
+        call unsus_increased
+        jump nice
+        
+        
 
-    e "We'd like to thank Piroshki for contributing my sprites; Mugenjohncel for Lucy, the band, and drawn backgrounds; and Jake for the magic circle."
 
-    e "The background music is \"Sunflower Slow Drag\", by Scott Joplin and Scott Hayden, performed by the United States Marine Band. The concert music is by Alessio."
+label nice:
 
-    show eileen vhappy
+    pov "Oh, no need to fret upon the little details."
 
-    e "We look forward to seeing what you create with Ren'Py. Have fun!"
+    pov "I have already put in an appearance..{w} Therefore, I will attend."
 
-    window hide
+    pov "Such an agenda must not be missed, after all.."
 
-    # Returning from the top level quits the game.
+    hide host normal
+    show host happy
+    with fade
+    
+    "A smile of some sort extrudes out of the thick mask."
+
+    u "Hah, well said [povname]"
+
+    u "Such an agenda must not be missed indeed..."
+
+    hide host happy
+    show host normal
+
+    u "This gathering shall be a fruitful one."
+
+    u "Of that, I can promise..{w}"
+
+    jump Meeting
+
+label bad:
+
+    pov "There is no need for you to sharpen your deception around me, host...{w} I have no need for your care nor hospitality.."
+
+    pov "I have already put in an appearance..{w} Therefore, I will attend."
+
+    pov "Such an agenda must not be missed, after all.."
+
+    hide host normal
+    show host sad
+    with dissolve
+
+    u "I see, pardon my ignorance then, [povname]"
+
+    "A frown of some sort extrudes from the thick mask."
+
+    hide host sad
+    show host normal
+    with fade
+
+    u "Such an agenda must not be missed indeed..."
+
+    u "I can already tell that this gathering shall be a fruitful one."
+
+    u "Oh without a doubt..{w}"
+
+    jump Meeting
+
+
+label Meeting:
+
+    hide host normal
+    show host happy
+    with fade
+
+    u "Pardon my ignorance yet again,{w} for I have just completely forgotten my proper etiquette.."
+
+    u "Allow me to Introduce myself, and this year's trade.."
+
+    host "I am Chicago's very own \'Altruist Host\', but I'd prefer you to keep our relationship as adjacent as possible,{w} so you are free to refer to me as \'Sir Veridan\'."
+
+    host "I'd really prefer us to be close...{w} I really hope you value even the smallest relationships life throws at you.." 
+
+    hide host happy
+    show host normal
+    with fade
+
+    "The inviting face behind the mask turns dead serious."
+
+    host "This year's trade involves one of humanity's greatest treasures,{w} children..."
+
+    host "Children that are not only of great potential,{w} but enhanced in their physical capacity at birth.."
+
+    host "We had a lot of partners who wanted to participate in this year's trade,{w} so you should feel lucky for being able to sit in this year's table..."
+
+    host "Everyone is sure to enjoy this year's event...{w} All of you will only be seated calmly down your spots, awaiting your values."
+
+    host "Although I might have to look over my agenda's here and there..."
+
+    hide host normal
+    show host happy
+    with dissolve
+
+    "Yet again, a smile of some sort extrudes from the thick mask,{w} but this time..{w} it seemed forced."
+
+    host "Anyhooo.."
+
+    host "Unfortunately we can no longer lengthen our introductions any further...{w} alas, I enjoy these moments too much..{w}"
+
+    hide host happy
+    show host normal
+    with fade
+
+    host "Now, come come..{w} It is time we introduce you to your spot,{w} all this chatter must have you tiresome."
+
+    "The Host walks after you, directing you towards the correct door amongst the many in the hall."
+
+
+    host "I'm assuming that you can understand the caution our Organization have for such an event to take place.." 
+
+    host "I'd like to point out that this year's event is actually way more tame than the usual caution we do."
+
+    "The Host yet again, extrudes a smile from their thick mask, as they look at you."
+
+    host "But don't be afraid, [povname]..{w} This year's event will be the best,{w} that I can guarantee you.."
+
+    host "Nothing will go as unplanned..{w} for the greater good."
+
+    stop music fadeout 2.0
+
+    scene bg black
+    play music "Cyberpunk 2077 soundtrack - Nocturne Op. 55 No. 1 (Chopin).mp3" volume 0.22
+    "You were led to a room, where it's door is just as identical as the few hundreds more of it's same design back in the hall."
+
+    "You think to yourself of how simple as a hall of doors sounds as a foundation for caution is...{w} yet how simultaneously effective it is."
+
+    "Your eyes took some time to get used to the darkness of the room.."
+
+    host "[povname]..."
+
+    host "Welcome!"
+
+    "Your eyes finally adjust.."
+
+    hide bg black
+    show bg tablemeet
+
+    host "To the Altruist Playground!"
+
+    jump Discussion1
+
+
+
+label Discussion1:
+"As you entered the dark room, you could sense their eyes staring into you, like knives on you skin, while you are guided to your seat"
+
+"When you finally sat down, you start laying the foundation of your plans of assassination...{w} hard as it may be, you still look for the best ways to establish a workaround for a few scenarios in your head."
+
+host "Greetings my dear guests, now that everyone has arrived and seated let's get this show on the road, Shall we?{w} First things first, let me say that-"
+
+"*Ring ring ring*{w} *Ring ring ring*{w} *Ring ring ring*{w} "
+
+host "Oh! Apologies that's mine.{w} Yes?{w} Mhmm.{w} What about them?{w} What do you mean???{w} Fine I'll get there as soon as I can"
+
+"*Hangs up*"
+
+host "MY deepest apologies dearest guests, but there are things that need my attention at the moment...{w} I will return shortly and the meeting will resume"
+
+"*Leaves*"
+
+"When they left, it was only you 6 in the room silenty sitting there in the room"
+
+"What will you do?"
+
+menu:
+
+    "-Talk to them-":
+        jump converse1
+    "-Keep to yourself-":
+        jump skip1
+
+label converse1:
+    call screen ConvoScreen
+        
+label Mari1:
+    m "In the history of football, not a single nation has been better at it than Brazil.{w} We have won five World Cup titles,{w} and they remain the only team to have participated at every edition of the tournament."
+    m "How about you, [povname]? Do you know anything about Football?"
+
+    menu:
+        "Yep, I love watching the game whenever the world cup comes around":
+            pov "Yep, I love watching the game whenever the world cup comes around"
+            m "Hah, you're quite the pleasant one, [povname]!"
+            call unsus_increased
+            jump converse1
+        "Hell yeah I do! I used to qb at my college football team":
+            pov "Hell yeah I do! I used to qb at my college football team"
+            m "Ugh, American Football?{w} I see how it is..."
+            call sus_increased
+            jump converse1
+
+
+label Luna1:
+    l "*on her phone* You Kurwa even on this bloody device I can tell how offbeat you are{w}, for the tenth the time,{w} NOT{w} MY{w} FUCKING{w} TEMPO"
+    l "Amateurs..{w} They call themselves musicians yet they can't even keep a steady rhythm..{w} What a joke."
+    menu:
+        "Yeah, pretty laughable. You'd think they'd practice more":
+            l "Hah, finally someone who understands, [povname]!"
+            call unsus_increased
+            jump converse1
+        "Hey, maybe cut them some slack? No one is perfect":
+            l "Tch, which is why not everyone is cut out to be a musician.."
+            call sus_increased
+            jump converse1
+
+label Wyatt1:
+    w "Roll for initiative, Mortal HAHA{w} I am the great Wolfkind, Fenrir. But you can call me the Dungeon Master"
+    w "Hey after this you wanna join the campaign I'm dm-ing?"
+    menu:
+        "Yeah sure":
+            w "AWESOME, I CAN'T WAIT, I wonder what role you'll use, [povname]!"
+            call unsus_increased
+            jump converse1
+        "Oh um Sorry I'll be busy":
+            w "oh I see how it is..."
+            call sus_increased
+            jump converse1
+
+label Jecyka1:
+    j "I am COACH, I am biggest and strongest here HAHA"
+    j "HAHA, Look at my big strong muscles, [povname]!{w} You think you can take me on?"
+    menu:
+        "Haha no, You can probably pick me up like a bunch of grapes":
+            j "HAH, you humor, Coach. I like you, [povname]!"
+            jump converse1
+        "Alright easy there, Hulk. No need to get aggressive":
+            j "Hay, seems like you don't respect Coach."
+            call sus_increased
+            jump converse1
+
+label Cill1:
+    c "Where is that fool, we were supposed to start like 10 minutes ago"
+    c "My bosses will not be pleased if we don't get what we came for"
+    menu:
+        "You're right, we should've already started":
+            c "At least someone here has some sense"      
+            jump converse1
+        "What's the rush? We're all just sitting here anyway, why do you need the kids these fast anyway?":
+            c "Hmph, That's classified information."
+            call sus_increased
+            jump converse1
+
+label finish1:
+    "Talking with everyone in the room was quite...{w} enlightening."
+    "Perhaps you can use what you've learned to your advantage later on{w} who knows?"
+    jump Event1
+
+label skip1:
+    "You decided to stay silent... You all just sat there around the table, in the dark room."
+    "minutes felt like centuries as the moments passed{w}"
+
+label Event1
+    "After what felt like an eternity, you hear footsteps approaching the room again.{w} The Altruist Host returns, with food as well. Carried by...{w} manipulated children...{w} They needed to be stopped"
+    "As one of the children puts the covered trays on the table, they remove the covers to show a folded piece of paper on each tray."
+    
+    host "I thought we should all have something to do while we wait for food, so I prepared a couple of Riddles for you all to solve, how does that sound?"
+    host "Bon appétit! I hope you all enjoy it!"
+
+    "You have no other choice but to play along..."
+
+    "Riddle 1: What is finished but never complete, played but never won and made by people who thought they'd finish in time"
+    "..."
+    "..."
+    "..."
+    "..."
+
+    jump quit
+    
+
+    
+    
+
+
+
+
+
+
+label quit: 
+    play music "images/Cyberpunk x Vicetone - Never Fade Away (Vicetone Remix).mp3" volume 0.4
+    scene bg demo
+    pause 180
+
+
     return
