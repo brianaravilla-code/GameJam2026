@@ -1459,7 +1459,7 @@ style slider_slider:
     xsize 900
 
 screen ConvoScreen:
-    add "images/screen.jpeg"
+    add "images/ConvoScreen.png"
     if mari_talk == False:
             imagebutton:
                 xalign 0.0
@@ -1513,6 +1513,19 @@ screen ConvoScreen:
             idle "images/idle.png"
 
     if cill_talk == False:
+            imagebutton:
+                xalign 0.0
+                yalign 0.5
+                idle "images/idle.png"
+                hover "images/Highlight1.png"
+                action SetVariable("mari_talk", True)
+    else:
+        imagebutton:
+            xalign 0.0
+            yalign 0.5
+            idle "images/idle.png"
+
+    if overall_talk == False:
             imagebutton:
                 xalign 0.0
                 yalign 0.5
