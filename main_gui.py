@@ -28,7 +28,7 @@ define config.check_conflicting_properties = True
 define gui.accent_color = '#00cc99'
 
 ## The color used for a text button when it is neither selected nor hovered.
-define gui.idle_color = '#ff0000'
+define gui.idle_color = '#888888'
 
 ## The small color is used for small text, which needs to be brighter/darker to
 ## achieve the same effect.
@@ -57,13 +57,13 @@ define gui.interface_text_color = '#ffffff'
 ## Fonts and Font Sizes ########################################################
 
 ## The font used for in-game text.
-define gui.text_font = "font/Quicksand-Bold.ttf"
+define gui.text_font = "font/RomanAntique.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "font/Quicksand-Bold.ttf"
+define gui.name_text_font = "font/White on Black.ttf"
 
 ## The font used for out-of-game text.
-define gui.interface_text_font = "font/Quicksand-Bold.ttf"
+define gui.interface_text_font = "font/White on Black.ttf"
 
 ## The size of normal dialogue text.
 define gui.text_size = 33
@@ -81,13 +81,13 @@ define gui.label_text_size = 36
 define gui.notify_text_size = 24
 
 ## The size of the game's title.
-define gui.title_text_size = 75
+define gui.title_text_size = 96
 
 
 ## Main and Game Menus #########################################################
 
 ## The images used for the main and game menus.
-define gui.main_menu_background = "gui/main_menu.jpg"
+define gui.main_menu_background = "gui/main_menu.png"
 define gui.game_menu_background = "gui/game_menu.png"
 
 
@@ -260,7 +260,7 @@ define gui.notify_ypos = 68
 define gui.choice_spacing = 33
 
 ## Buttons in the navigation section of the main and game menus.
-define gui.navigation_spacing = 50
+define gui.navigation_spacing = 6
 
 ## Controls the amount of spacing between preferences.
 define gui.pref_spacing = 15
