@@ -88,6 +88,10 @@ elif povname == "Lucy":
         with fade
         $ renpy.movie_cutscene("images/movies/david.webm") 
         return
+elif povname == "Edgerunner":
+        with fade
+        $ renpy.movie_cutscene("images/movies/david.webm") 
+        return
 else:
     host "So now that's everyone accounted for"
     host "Welcome to the playground" 
