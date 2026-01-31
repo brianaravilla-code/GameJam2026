@@ -297,8 +297,8 @@ screen navigation():
         spacing gui.navigation_spacing
 
         if main_menu:
-            xalign 0.5
-            yalign 0.5
+            xalign 0.4
+            yalign 0.7
             textbutton _("Start") action Start()
 
         else:
@@ -354,14 +354,9 @@ screen main_menu():
 
     add gui.main_menu_background
 
-    ## This empty frame darkens the main menu.
-    frame:
-        style "main_menu_frame"
+    ## This empty frame darkens the main menu.        
 
-        background "gui/overlay/main_menu.png"
-        
-
-    ## The use statement includes another screen inside this one. The actual
+    ## The use statement includes another screen inside this one    . The actual
     ## contents of the main menu are in the navigation screen.
     use navigation
 
@@ -370,11 +365,8 @@ screen main_menu():
         vbox:
             style "main_menu_vbox"
 
-            text "[config.name!t]":
+            text "Altruist's Playground":
                 style "main_menu_title"
-
-            text "[config.version]":
-                style "main_menu_version"
 
 
 style main_menu_frame is empty
@@ -387,12 +379,8 @@ style main_menu_version is main_menu_text
 
 
 style main_menu_vbox:
-    xalign 1.0
-    xoffset -30
-    xmaximum 1200
-    yalign 1.0
-    yoffset -30
-
+    xalign 0.5
+    yalign 0.4
 style main_menu_text:
     properties gui.text_properties("main_menu", accent=True)
 
@@ -1107,7 +1095,7 @@ style skip_text:
 style skip_triangle:
     ## We have to use a font that has the BLACK RIGHT-POINTING SMALL TRIANGLE
     ## glyph in it.
-    font "Quicksand-Bold.ttf"
+    font "RomanAntique.ttf"
 
 
 ## Notify screen ###############################################################
@@ -1469,3 +1457,73 @@ style slider_vbox:
 style slider_slider:
     variant "small"
     xsize 900
+
+screen ConvoScreen:
+    add "images/screen.jpeg"
+    if mari_talk == False:
+            imagebutton:
+                xalign 0.0
+                yalign 0.5
+                idle "images/idle.png"
+                hover "images/Highlight1.png"
+                action SetVariable("mari_talk", True)
+    else:
+        imagebutton:
+            xalign 0.0
+            yalign 0.5
+            idle "images/idle.png"
+
+    if luna_talk == False:
+            imagebutton:
+                xalign 0.0
+                yalign 0.5
+                idle "images/idle.png"
+                hover "images/Highlight1.png"
+                action SetVariable("luna_talk", True)
+    else:
+        imagebutton:
+            xalign 0.0
+            yalign 0.5
+            idle "images/idle.png"
+
+    if wyatt_talk == False:
+            imagebutton:
+                xalign 0.0
+                yalign 0.5
+                idle "images/idle.png"
+                hover "images/Highlight1.png"
+                action SetVariable("wyatt_talk", True)
+    else:
+        imagebutton:
+            xalign 0.0
+            yalign 0.5
+            idle "images/idle.png"
+
+    if jecyka_talk == False:
+            imagebutton:
+                xalign 0.0
+                yalign 0.5
+                idle "images/idle.png"
+                hover "images/Highlight1.png"
+                action SetVariable("jecyka_talk", True)
+    else:
+        imagebutton:
+            xalign 0.0
+            yalign 0.5
+            idle "images/idle.png"
+
+    if cill_talk == False:
+            imagebutton:
+                xalign 0.0
+                yalign 0.5
+                idle "images/idle.png"
+                hover "images/Highlight1.png"
+                action SetVariable("mari_talk", True)
+    else:
+        imagebutton:
+            xalign 0.0
+            yalign 0.5
+            idle "images/idle.png"
+    
+
+     
