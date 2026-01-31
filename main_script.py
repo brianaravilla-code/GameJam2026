@@ -9,7 +9,7 @@ define j = Character("Jecyka", color= "#ff0000")
 define c = Character("Cillstead", color= "#0000ff")
 
 define host = Character("Sir Veridan, The Altruist")
-define pov = Character("[povname]")
+define pov = Character("The [povname]")
 
 default mari_trust = 0
 default luna_trust = 0
@@ -21,11 +21,12 @@ image davidend = Movie(play="David.webm",size=(1920,1080),loop=False)
 # The game starts here.
 
 label start:
-    play music "Roblox Meep City_ The Playground Theme (Day Time).mp3" volume 0.2
+  
 
     scene bg black
+    
     with dissolve
-
+    play music "images/Roblox Meep City_ The Playground Theme (Day Time).mp3" volume 0.2
     show johnsanili normal
     with fade
 
@@ -35,8 +36,10 @@ label start:
 
     host "Come The others are waiting"
 
-    scene bg spawn
-    with dissolve
+    hide bg black
+
+    show bg spawn behind johnsanili
+    with fade
 
     show johnsanili normal at left
     with moveinleft
@@ -50,34 +53,53 @@ label start:
     host "Please come and sit, have you decided on a title yet?"
 
     label name:
-    $ povname = renpy.input("What is your name", length=32)
+    $ povname = renpy.input("Which title would you like to go by: The", length=32)
     $ povname = povname.strip()
-    pov "Hello you may call me [povname]"
-if povname == "The Altruist":
-    host "Haha"
-    host "No. Try Again"
+    $ povname = povname.capitalize()
+if povname == "Altruist":
+    pov "Hello you may call me The [povname]"
+    host "Haha. No, Try again"
     jump name
-elif povname == "The Scouter":
-    m "Tch. Already taken"
+elif povname == "Scouter":
+    pov "Hello you may call me The [povname]"
+    host "Hehe Apologies but that title has been taken"
     jump name
-elif povname == "The Conductor":
-    l "I do believe if anyone deserves that title it should be me."
+elif povname == "Conductor":
+    pov "Hello you may call me The [povname]"
+    host "Woops but that title has been taken"
     jump name
-elif povname == "The Dungeon Master":
-    w "Hey Sorry but I got that."
+elif povname == "Dungeon Master":
+    pov "Hello you may call me The [povname]"
+    host "Sorry but that title is in use"
     jump name
-elif povname == "The Coach":
-    j ""
+elif povname == "Coach":
+    pov "Hello you may call me The [povname]"
+    host "Ooh that's being used by someone else"
     jump name
-elif povname == "The Agent":
-    c "Hmph, denied"
+elif povname == "Agent":
+    pov "Hello you may call me The [povname]"
+    host "Nope it's being used"
     jump name
-elif povname == "David","Lucy":
+elif povname == "David":
+        with fade
+        $ renpy.movie_cutscene("images/movies/david.webm") 
+        return
+elif povname == "Lucy":
         with fade
         $ renpy.movie_cutscene("images/movies/david.webm") 
         return
 else:
     host "So now that's everyone accounted for"
-    host "Welcome to the playground"    
+    host "Welcome to the playground" 
+    jump Meeting
+    
 
-       
+label Meeting:
+    host "First things first to discuss matters of payment"
+    host "I'll gladly acce-"
+    "*Ring Ring*{w} *Ring Ring* {w} *Ring Ring*"
+    host "Excuse me I have to take this"
+    host "Yes?{w} mhm mhm {w} Okay {w} Right away I'll be right there"
+    host "Apologies, but I must go for a moment, there are pressing matters I must attend to"
+    host "Please wait here while I have a few things sorted"
+
